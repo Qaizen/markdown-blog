@@ -11,8 +11,13 @@ app.get('/', (req, res) => {
         title: 'Test Article',
         createdAt: Date.now(),
         description: "Test description"
+    },
+    {
+        title: 'Test Article',
+        createdAt: Date.now(),
+        description: "Test description 2"
     }]
-    res.render('index', {text: articles })
+    res.render('index', { articles: articles })
 }) //Here we are getting the app and passing in the root, request, response, fat arrow function and send to the user “hello world”  
 
 app.listen(3001) //start up application on port 5000
