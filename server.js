@@ -1,23 +1,30 @@
-const express = require('express') //require the server
-const articleRouter = require('./routes/articles')
-const app = express() // app variable and call express function
+const express = require("express"); //require the server
+const mongoose = require("mongoose");
+const articleRouter = require("./routes/articles");
+const app = express(); // app variable and call express function
 
-app.set('view engine', 'ejs') //Set the view engine to ejs because it will convert to html 
+mongoose.connect("mongodb://localhost/blog", {
+  useNewParser: true, useUnifiedTopology: true,
+})
 
-app.use('/articles', articleRouter)
+app.set("view engine", "ejs"); //Set the view engine to ejs because it will convert to html
 
-app.get('/', (req, res) => {
-    const articles =[{
-        title: 'Test Article',
-        createdAt: new Date(),
-        description: 'Test description'
+app.use("/articles", articleRouter);
+
+app.get("/", (req, res) => {
+  const articles = [
+    {
+      title: "Test Article",
+      createdAt: new Date(),
+      description: "Test description",
     },
     {
-        title: 'Test Article 2',
-        createdAt: new Date(),
-        description: 'Test description 2'
-    }]
-    res.render('articles/index', { articles: articles })
-}) //Here we are getting the app and passing in the root, request, response, fat arrow function and send to the user “hello world”  
+      title: "Test Article 2",
+      createdAt: new Date(),
+      description: "Test description 2",
+    },
+  ];
+  res.render("articles/index", { articles: articles });
+}); //Here we are getting the app and passing in the root, request, response, fat arrow function and send to the user “hello world”
 
-app.listen(3001) //start up application on port 5000
+app.listen(3001); //start up application on port 5000
