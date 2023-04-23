@@ -3,13 +3,14 @@ const mongoose = require("mongoose");
 const articleRouter = require("./routes/articles");
 const app = express(); // app variable and call express function
 
-mongoose.connect("mongodb://localhost/blog", {
-  useNewParser: true, useUnifiedTopology: true,
+mongoose.connect('mongodb://localhost/blog', {
+  useNewUrlParser: true, useUnifiedTopology: true
 })
 
 app.set("view engine", "ejs"); //Set the view engine to ejs because it will convert to html
 
-app.use("/articles", articleRouter);
+
+app.use(express.urlencoded({ extended: false }))
 
 app.get("/", (req, res) => {
   const articles = [
@@ -26,5 +27,7 @@ app.get("/", (req, res) => {
   ];
   res.render("articles/index", { articles: articles });
 }); //Here we are getting the app and passing in the root, request, response, fat arrow function and send to the user “hello world”
+
+app.use("/articles", articleRouter);
 
 app.listen(3001); //start up application on port 5000
