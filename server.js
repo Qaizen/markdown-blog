@@ -1,5 +1,6 @@
 const express = require("express"); //require the server
 const mongoose = require("mongoose");
+const Article = require('./models/article')
 const articleRouter = require("./routes/articles");
 const app = express(); // app variable and call express function
 
@@ -8,23 +9,11 @@ mongoose.connect('mongodb://localhost/blog', {
 })
 
 app.set("view engine", "ejs"); //Set the view engine to ejs because it will convert to html
-
-
 app.use(express.urlencoded({ extended: false }))
 
-app.get("/", (req, res) => {
-  const articles = [
-    {
-      title: "Test Article",
-      createdAt: new Date(),
-      description: "Test description",
-    },
-    {
-      title: "Test Article 2",
-      createdAt: new Date(),
-      description: "Test description 2",
-    },
-  ];
+app.get("/", async (req, res) => {
+  const articles = await Article.find().sort({
+  createdAt: 'desc'})
   res.render("articles/index", { articles: articles });
 }); //Here we are getting the app and passing in the root, request, response, fat arrow function and send to the user “hello world”
 
