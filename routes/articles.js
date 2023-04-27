@@ -5,11 +5,11 @@ const router = express.Router(); //Gives router to use to create like when you .
 router.get("/new", (req, res) => {
   res.render("articles/new", { article: new Article() });
 });
-router.get("/:id", async (req, res) => {
-    const article= await Article.findById(req.params.id)
-    if (article == null) res.redirect('/')
-  res.render('articles/show', { article: article})
-})
+router.get("/:slug", async (req, res) => {
+  const article = await Article.findOne({ slug: req.params.slug });
+  if (article == null) res.redirect("/");
+  res.render("articles/show", { article: article });
+});
 
 router.post("/", async (req, res) => {
   let article = new Article({
@@ -18,14 +18,18 @@ router.post("/", async (req, res) => {
     markdown: req.body.markdown,
   });
   try {
-    // article = await article.save()
-    // res.redirect(`/articles/${article.id}`)
     const savedArticle = await article.save();
-    res.redirect(`/articles/${savedArticle.id}`);
+    res.redirect(`/articles/${article.slug}`);
   } catch (e) {
     console.log(e);
     res.render("articles/new", { article: article });
   }
+});
+
+
+router.delete("/:id", async (req, res) => {
+  await Article.findByIdAndDelete(req.params.id);
+  res.redirect("/");
 });
 
 module.exports = router; //We have to tell the application to use the router.
